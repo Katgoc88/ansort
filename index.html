@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antsort</title>
+  <meta name="description" content="Antsort — Twój osobisty dom w internecie." />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1e2430;
+      --muted: #667085;
+      --line: #dbe3f0;
+      --accent: #2f6df6;
+      --accent-soft: #eaf1ff;
+      --shadow: 0 10px 30px rgba(21, 36, 74, 0.08);
+      --radius: 18px;
+      --max: 960px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, #eef4ff 0, transparent 30%),
+        radial-gradient(circle at top right, #f3f7ff 0, transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(245, 247, 251, 0.8);
+      border-bottom: 1px solid rgba(219, 227, 240, 0.7);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      font-size: 18px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .status-pill {
+      font-size: 13px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid #d7e5ff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 72px 0 36px;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.98));
+      border: 1px solid rgba(219, 227, 240, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+      padding: 56px 32px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(47,109,246,0.12) 0%, rgba(47,109,246,0) 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(42px, 8vw, 76px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .hero-desc {
+      margin: 22px 0 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 8px 20px rgba(47, 109, 246, 0.18);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(47, 109, 246, 0.22);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fbff;
+    }
+
+    .section {
+      padding: 18px 0;
+      scroll-margin-top: 90px;
+    }
+
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      margin: 22px 0;
+    }
+
+    .section-label {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    .lead {
+      font-size: 19px;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .quote {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      background: #f8fbff;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mini-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fcfdff;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .principles li {
+      padding: 16px 18px;
+      background: #f9fbff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-weight: 600;
+    }
+
+    .footer {
+      padding: 30px 0 60px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        padding-top: 44px;
+      }
+
+      .hero-card {
+        padding: 36px 20px;
+        border-radius: 22px;
+      }
+
+      .grid-2,
+      .principles {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        gap: 12px;
+      }
+
+      .status-pill {
+        font-size: 12px;
+        padding: 7px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">Ant<span>sort</span></div>
+      <div class="status-pill">Wczesna wizja / Early concept</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-card">
+        <div class="eyebrow">Antsort</div>
+        <h1>Twój osobisty dom w internecie.</h1>
+        <p class="hero-subtitle">Nowy sposób organizowania życia w sieci.</p>
+        <p class="hero-desc">
+          Wizja miejsca, które naprawdę należy do użytkownika — nie do platform,
+          nie do kolejnej aplikacji, tylko do niego.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#problem">Czytaj dalej</a>
+          <a class="btn btn-secondary" href="#status">Status projektu</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="section-card">
+        <p class="section-label">Problem</p>
+        <h2>Internet jest potężny, ale nie jest zbudowany wokół człowieka.</h2>
+        <p class="lead">Wyobraź sobie zwykły dzień w dzisiejszym świecie.</p>
+        <p>
+          Rano sięgasz po telefon. W nim dziesiątki aplikacji. Wchodzisz w jedną,
+          potem w drugą, potem w trzecią. Dokumenty są w jednym miejscu, notatki
+          w innym, kalendarz gdzieś indziej, zakładki w przeglądarce, rzeczy do pracy
+          w kolejnej usłudze, bank jeszcze gdzie indziej. Każda rzecz istnieje
+          w osobnym świecie.
+        </p>
+        <p>
+          Człowiek próbuje to ogarniać. Tworzy foldery, zapisuje linki, robi listy.
+          Układa sobie jakiś porządek. A potem zmienia telefon i zaczyna od nowa.
+          Zmienia komputer i znów wszystko trzeba układać od początku.
+        </p>
+        <p class="quote">
+          Bo w gruncie rzeczy to nigdy nie jest jego przestrzeń. To są tylko kawałki
+          przestrzeni należące do różnych platform.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="idea">
+      <div class="section-card">
+        <p class="section-label">Idea</p>
+        <h2>A co jeśli zamiast poruszać się po tysiącu aplikacji miałbyś swój własny dom w internecie?</h2>
+        <p>I wtedy pojawia się pewna myśl.</p>
+        <p>
+          Nie kawałek domu należący do Google. Nie kawałek domu należący do Apple.
+          Po prostu miejsce, które jest Twoje.
+        </p>
+        <p>
+          Miejsce, do którego wchodzisz i z którego możesz pójść gdziekolwiek.
+        </p>
+        <p>
+          Ale to nie jest zwykły pulpit z ikonami. Ten dom możesz sam zaprojektować.
+          Możesz zdecydować gdzie są drzwi, gdzie są półki, gdzie są szuflady,
+          gdzie trzymasz rzeczy ważne, gdzie rzeczy codzienne, a gdzie te, które
+          wyciągasz raz na jakiś czas.
+        </p>
+        <p class="muted">Każdy człowiek buduje go trochę inaczej.</p>
+      </div>
+    </section>
+
+    <section class="section" id="ants">
+      <div class="section-card">
+        <p class="section-label">Mrówki</p>
+        <h2>W tym domu nie jesteś sam.</h2>
+        <p class="lead">Są tam małe pomocniki. Mrówki.</p>
+        <p>
+          Nie dlatego, że ktoś wymyślił motyw graficzny. Mrówki są metaforą funkcji systemu.
+        </p>
+        <p>
+          Jeśli coś trzeba gdzieś odłożyć — mogą to zanieść. Jeśli coś trzeba uporządkować —
+          mogą pomóc to posortować. Jeśli czegoś szukasz — mogą pokazać drogę.
+        </p>
+        <p>
+          Tworzą ścieżki, pomagają w porządkowaniu, ułatwiają codzienne ruchy w tym domu.
+        </p>
+        <p class="quote">
+          Ale to Ty jesteś architektem. To Ty decydujesz gdzie co jest i jak wygląda Twój porządek.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="name">
+      <div class="section-card">
+        <p class="section-label">Nazwa</p>
+        <h2>Dlaczego Antsort?</h2>
+        <p>
+          Nazwa Antsort bierze się z bardzo prostego obrazu. Kiedy patrzysz na mrowisko
+          z boku, widzisz chaos. Setki mrówek biegają w różne strony, coś niosą,
+          gdzieś znikają, wracają.
+        </p>
+        <p>
+          Ale kiedy przyjrzysz się chwilę dłużej, zaczynasz zauważać, że w tym chaosie
+          jest porządek.
+        </p>
+        <p>
+          Mrówki wiedzą gdzie iść, co przenieść, gdzie coś odłożyć. Tworzą ścieżki,
+          magazynują rzeczy i utrzymują cały system w ruchu.
+        </p>
+        <p class="quote">
+          Małe działania, które razem układają chaos w porządek.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="people">
+      <div class="section-card">
+        <p class="section-label">Różni ludzie</p>
+        <h2>Antsort nie jest dla jednego typu człowieka.</h2>
+        <div class="grid-2">
+          <div class="mini-card">
+            <h3>Osoba pracująca przy komputerze</h3>
+            <p>Dziesiątki zakładek, dokumentów i projektów. W Antsort każdy projekt ma swoje miejsce.</p>
+          </div>
+          <div class="mini-card">
+            <h3>Codzienny użytkownik internetu</h3>
+            <p>Bank, rachunki, kalendarz, rozrywka. W jego domu wszystko jest tam, gdzie powinno być.</p>
+          </div>
+          <div class="mini-card">
+            <h3>Kolekcjoner rzeczy z internetu</h3>
+            <p>Linki, inspiracje, artykuły. W Antsort tworzy z nich swoją własną bibliotekę.</p>
+          </div>
+          <div class="mini-card">
+            <h3>Osoba działająca w wielu narzędziach</h3>
+            <p>Dla niej Antsort staje się centrum sterowania cyfrowym światem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="time">
+      <div class="section-card">
+        <p class="section-label">Czas</p>
+        <h2>Czas też może być częścią tej przestrzeni.</h2>
+        <p>
+          Grafik pracy, plan lekcji, harmonogram dnia.
+        </p>
+        <p>
+          Zamiast przepisywać wszystko do kalendarza, po prostu wrzucasz plan
+          do swojego domu.
+        </p>
+        <p>
+          System pomaga odnaleźć właściwy moment i prowadzi do rzeczy, które są z nim związane.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="shared">
+      <div class="section-card">
+        <p class="section-label">Wspólne przestrzenie</p>
+        <h2>Każdy ma swój własny dom, ale między domami mogą istnieć drzwi.</h2>
+        <p>
+          Antsort nie musi być tylko przestrzenią jednej osoby.
+        </p>
+        <p>
+          Możesz udostępnić komuś półkę z dokumentami, plan wakacji, listę rzeczy do zrobienia
+          albo ważne linki.
+        </p>
+        <p class="quote">
+          Nie trzeba nic wysyłać. Po prostu dzielicie kawałek przestrzeni.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="principles">
+      <div class="section-card">
+        <p class="section-label">Zasady</p>
+        <h2>Podstawowe założenia świata Antsort.</h2>
+        <ul class="principles">
+          <li>Użytkownik jest architektem.</li>
+          <li>System pomaga, ale nie narzuca.</li>
+          <li>Twoja przestrzeń należy do Ciebie.</li>
+          <li>Małe działania tworzą porządek.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="status">
+      <div class="section-card">
+        <p class="section-label">Status</p>
+        <h2>To na razie wczesna wizja.</h2>
+        <p>
+          Eksperymentujemy z nowym sposobem organizowania życia w internecie.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    Antsort — wczesna wizja produktu
+  </footer>
+</body>
+</html>
