@@ -1,250 +1,562 @@
 <!DOCTYPE html>
-<html lang="pl">
+
+<html lang="pl" lang-mode="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antsort</title>
-  <meta name="description" content="Antsort — Twój osobisty dom w internecie." />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-en="Antsort Vision" data-pl="Antsort Vision">Antsort Vision</title>
+<meta content="Antsort Vision – narracyjna wizja osobistego domu w internecie." data-en="Antsort Vision – a narrative vision of a personal home on the internet." data-pl="Antsort Vision – narracyjna wizja osobistego domu w internecie." name="description"/>
+<style>
     :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #1e2430;
-      --muted: #667085;
-      --line: #dbe3f0;
-      --accent: #2f6df6;
-      --accent-soft: #eaf1ff;
-      --shadow: 0 10px 30px rgba(21, 36, 74, 0.08);
+      --bg: #e6d4a6;
+      --bg-soft: #efdfb7;
+      --plate: linear-gradient(to bottom, #fdf1d5, #e6c98b);
+      --plate-strong: linear-gradient(to bottom, rgba(253,241,213,0.98), rgba(230,201,139,0.94));
+      --plate-soft: linear-gradient(to bottom, rgba(253,241,213,0.92), rgba(230,201,139,0.84));
+      --card: rgba(255,255,255,.18);
+      --card-strong: rgba(255,255,255,.28);
+      --text: #2b2216;
+      --muted: rgba(43,34,22,.72);
+      --muted-strong: rgba(43,34,22,.84);
+      --line: rgba(210,182,121,.95);
+      --line-soft: rgba(255,255,255,.45);
+      --accent: #6d4c41;
+      --accent-strong: #5d4037;
+      --accent-soft: rgba(255,255,255,.42);
+      --ok: #2e7d32;
+      --shadow: 0 18px 55px rgba(0,0,0,.14);
+      --shadow-soft: 0 10px 22px rgba(0,0,0,.12);
+      --shadow-hover: 0 26px 70px rgba(0,0,0,.18);
       --radius: 18px;
-      --max: 960px;
+      --radius-lg: 24px;
+      --max: 1120px;
+      --focus: 0 0 0 3px rgba(212,175,55,.25), inset 0 1px 0 rgba(255,255,255,.7);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font: 14px/1.7 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, #eef4ff 0, transparent 30%),
-        radial-gradient(circle at top right, #f3f7ff 0, transparent 28%),
-        var(--bg);
+        radial-gradient(circle at top left, rgba(255,255,255,.22) 0, transparent 22%),
+        radial-gradient(circle at top right, rgba(255,255,255,.16) 0, transparent 20%),
+        radial-gradient(circle at bottom right, rgba(109,76,65,.08) 0, transparent 24%),
+        linear-gradient(to bottom, var(--bg-soft), var(--bg));
       color: var(--text);
-      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.04), rgba(255,255,255,0) 140px),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.04) 0,
+          rgba(255,255,255,.04) 1px,
+          transparent 1px,
+          transparent 80px
+        );
+      opacity: .45;
     }
 
     .wrap {
       width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 10;
-      backdrop-filter: blur(10px);
-      background: rgba(245, 247, 251, 0.8);
-      border-bottom: 1px solid rgba(219, 227, 240, 0.7);
+      z-index: 20;
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,.28);
+      border-bottom: 1px solid rgba(255,255,255,.38);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .08), inset 0 1px 0 rgba(255,255,255,.35);
     }
 
     .topbar-inner {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      justify-content: space-between;
+      gap: 18px;
       padding: 14px 0;
     }
 
     .brand {
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .03em;
+      font-size: 19px;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
     }
 
-    .brand span {
-      color: var(--accent);
+    .brand span { color: var(--accent); }
+
+    .topnav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .topnav a {
+      text-decoration: none;
+      color: var(--muted-strong);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 7px 10px;
+      border-radius: 10px;
+      transition: .18s ease;
+    }
+
+    .topnav a:hover {
+      background: rgba(255,255,255,.32);
+      color: var(--text);
     }
 
     .status-pill {
-      font-size: 13px;
-      color: var(--accent);
-      background: var(--accent-soft);
-      border: 1px solid #d7e5ff;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text);
+      background: rgba(255,255,255,.32);
+      border: 1px solid rgba(255,255,255,.55);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
       padding: 8px 12px;
-      border-radius: 999px;
+      border-radius: 14px;
       white-space: nowrap;
     }
 
     .hero {
-      padding: 72px 0 36px;
+      padding: 56px 0 24px;
     }
 
-    .hero-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.98));
-      border: 1px solid rgba(219, 227, 240, 0.9);
+    .hero-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .75fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .hero-side {
+      background: var(--plate-strong);
+      border: 1px solid rgba(255,255,255,.38);
       box-shadow: var(--shadow);
-      border-radius: 28px;
-      padding: 56px 32px;
+      border-radius: var(--radius-lg);
       overflow: hidden;
       position: relative;
     }
 
-    .hero-card::after {
+    .hero-card {
+      padding: 56px 36px 34px;
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-card::after,
+    .hero-side::after {
       content: "";
       position: absolute;
-      right: -80px;
-      top: -80px;
-      width: 240px;
-      height: 240px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(47,109,246,0.12) 0%, rgba(47,109,246,0) 70%);
       pointer-events: none;
+      opacity: .72;
+    }
+
+    .hero-card::after {
+      right: -56px;
+      top: -56px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,255,255,.42) 0%, rgba(255,255,255,0) 72%);
+    }
+
+    .hero-side::after {
+      left: -54px;
+      bottom: -54px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(109,76,65,.14) 0%, rgba(109,76,65,0) 70%);
     }
 
     .eyebrow {
-      display: inline-block;
-      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      width: fit-content;
       padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
+      border-radius: 14px;
+      background: rgba(255,255,255,.34);
+      border: 1px solid rgba(255,255,255,.55);
+      color: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(109,76,65,.12);
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(42px, 8vw, 76px);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
+      margin: 0 0 12px;
+      font-size: clamp(46px, 8vw, 82px);
+      line-height: .94;
+      letter-spacing: -0.05em;
+      color: var(--text);
+      max-width: 720px;
     }
 
     .hero-subtitle {
       margin: 0;
-      font-size: clamp(20px, 3vw, 28px);
-      font-weight: 700;
-      color: var(--text);
+      font-size: clamp(20px, 3vw, 30px);
+      font-weight: 800;
+      color: rgba(43,34,22,.92);
     }
 
     .hero-desc {
       margin: 22px 0 0;
-      max-width: 720px;
+      max-width: 700px;
       color: var(--muted);
       font-size: 18px;
     }
 
     .hero-actions {
-      margin-top: 28px;
+      margin-top: 30px;
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
     }
 
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       text-decoration: none;
-      padding: 12px 18px;
-      border-radius: 12px;
+      min-height: 46px;
+      padding: 11px 18px;
+      border-radius: 10px;
       font-weight: 700;
-      border: 1px solid transparent;
-      transition: 0.2s ease;
+      letter-spacing: .02em;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.55);
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+      transition: .18s ease;
     }
+
+    .btn:hover { filter: brightness(1.03); }
+    .btn:active { transform: translateY(1px); }
+    .btn:focus-visible { outline: 0; box-shadow: var(--focus); }
 
     .btn-primary {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 8px 20px rgba(47, 109, 246, 0.18);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 24px rgba(47, 109, 246, 0.22);
+      background: linear-gradient(180deg, #fae8b9, #ecd596);
     }
 
     .btn-secondary {
-      background: white;
-      color: var(--text);
-      border-color: var(--line);
+      background: linear-gradient(to bottom, rgba(255,255,255,.52), rgba(255,255,255,.18));
     }
 
-    .btn-secondary:hover {
-      background: #f9fbff;
+    .hero-notes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .hero-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.20);
+      border: 1px solid rgba(255,255,255,.38);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--muted-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
+    }
+
+    .hero-note::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .hero-side {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: space-between;
+    }
+
+    .hero-side-title {
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: var(--accent-strong);
+      margin: 0;
+    }
+
+    .hero-side-block {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.26);
+      border: 1px solid rgba(255,255,255,.44);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+    }
+
+    .hero-side-block strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .hero-side-block p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .hero-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hero-chiprow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.28);
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(43,34,22,.72);
+    }
+
+    .hero-scrollhint {
+      margin-top: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .hero-scrollhint::after {
+      content: "↓";
+      font-size: 15px;
+      color: var(--accent);
     }
 
     .section {
-      padding: 18px 0;
-      scroll-margin-top: 90px;
+      padding: 14px 0;
+      scroll-margin-top: 86px;
     }
 
     .section-card {
-      background: var(--card);
-      border: 1px solid var(--line);
+      background: var(--plate-soft);
+      border: 1px solid rgba(255,255,255,.38);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 28px 24px;
-      margin: 22px 0;
+      margin: 20px 0;
+      position: relative;
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .section-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .section-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,.46);
+    }
+
+    .section-card::after {
+      content: "";
+      position: absolute;
+      right: -50px;
+      bottom: -50px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 72%);
+      pointer-events: none;
+    }
+
+    .section-headline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
     }
 
     .section-label {
       margin: 0 0 10px;
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
+      color: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+    }
+
+    .section-index {
+      flex: 0 0 auto;
+      min-width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--accent-strong);
+      background: rgba(255,255,255,.34);
+      border: 1px solid rgba(255,255,255,.5);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-card > p,
+    .section-card > .quote,
+    .section-card > .grid-2,
+    .section-card > .principles {
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-card > .grid-2,
+    .section-card > .principles {
+      width: 100%;
+    }
+
+    .section-card > .quote {
+      margin-top: 26px;
+    }
+
+    .mini-card p,
+    .principles li {
+      font-size: 17px;
+      line-height: 1.72;
     }
 
     h2 {
       margin: 0 0 16px;
       font-size: clamp(28px, 4vw, 40px);
-      line-height: 1.05;
+      line-height: 1.06;
       letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 840px;
     }
 
     p {
-      margin: 0 0 16px;
+      margin: 0 0 18px;
+      font-size: 18px;
+      line-height: 1.82;
     }
 
     .lead {
-      font-size: 19px;
-      color: var(--text);
+      font-size: 22px;
+      line-height: 1.65;
+      color: rgba(43,34,22,.92);
+      font-weight: 700;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .muted {
       color: var(--muted);
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .quote {
-      margin: 22px 0;
+      margin: 22px 0 0;
       padding: 18px 20px;
       border-left: 4px solid var(--accent);
-      background: #f8fbff;
+      background: rgba(255,255,255,.34);
       border-radius: 12px;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.72;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
+      align-items: stretch;
     }
 
     .mini-card {
       padding: 18px;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(255,255,255,.42);
       border-radius: 14px;
-      background: #fcfdff;
+      background: rgba(255,255,255,.24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.3);
     }
 
     .mini-card h3 {
       margin: 0 0 10px;
-      font-size: 18px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
     }
 
     .principles {
@@ -258,245 +570,475 @@
 
     .principles li {
       padding: 16px 18px;
-      background: #f9fbff;
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,.28);
+      border: 1px solid rgba(255,255,255,.42);
       border-radius: 14px;
-      font-weight: 600;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+      position: relative;
+      padding-left: 44px;
+    }
+
+    .principles li::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(109,76,65,.10);
     }
 
     .footer {
-      padding: 30px 0 60px;
-      color: var(--muted);
-      font-size: 14px;
-      text-align: center;
+      padding: 24px 0 54px;
     }
 
-    @media (max-width: 760px) {
-      .hero {
-        padding-top: 44px;
-      }
+    .footer-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,.24);
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      padding: 18px 20px;
+      color: rgba(43,34,22,.82);
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-      .hero-card {
-        padding: 36px 20px;
-        border-radius: 22px;
-      }
+    .footer-brand {
+      font-weight: 900;
+      letter-spacing: .02em;
+      color: var(--text);
+    }
 
-      .grid-2,
-      .principles {
+    .footer-brand span { color: var(--accent); }
+
+    @media (max-width: 980px) {
+      .hero-shell {
         grid-template-columns: 1fr;
       }
 
       .topbar-inner {
-        gap: 12px;
+        grid-template-columns: 1fr;
+        justify-items: start;
       }
 
-      .status-pill {
-        font-size: 12px;
-        padding: 7px 10px;
+      .topnav {
+        justify-content: flex-start;
       }
     }
-  </style>
+
+    @media (max-width: 760px) {
+      .hero { padding-top: 40px; }
+      .hero-card { padding: 34px 20px 28px; min-height: unset; }
+      .hero-side { padding: 16px; }
+      .grid-2, .principles { grid-template-columns: 1fr; }
+      .section-headline { flex-direction: column; }
+      .section-index { min-width: 44px; height: 44px; }
+      .hero-actions .btn { width: 100%; }
+      .footer-card { flex-direction: column; align-items: flex-start; }
+      .topnav a { padding-left: 0; }
+      .status-pill { font-size: 11px; }
+    }
+  
+/* --- unified reading column for sections --- */
+.section-headline,
+.section-card > h2,
+.section-card > p,
+.section-card > .lead,
+.section-card > .quote,
+.section-card > .grid-2,
+.section-card > .principles {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* keep section index number visually to the side */
+.section-headline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* slightly larger section titles for hierarchy */
+.section-headline h2 {
+  font-size: 34px;
+  line-height: 1.25;
+}
+
+/* smoother scrolling between sections */
+html {
+  scroll-behavior: smooth;
+}
+
+/* stronger visual difference for hero buttons */
+.btn {
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-size: 15px;
+}
+
+/* manifesto lines under buttons */
+.hero-note {
+  font-size: 16px;
+  font-weight: 600;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.35);
+}
+
+/* hero right panel after removing keyword chips */
+.hero-side{
+  justify-content: flex-start;
+  gap: 22px;
+}
+
+.hero-side .hero-side-block{
+  padding: 20px 18px;
+}
+
+.hero-side .hero-side-block strong{
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.hero-side .hero-side-block p{
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* stronger CTA distinction */
+.hero-actions{
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.btn{
+  min-height: 50px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.btn-primary{
+  background: linear-gradient(180deg, #f8e2a8, #e6c98b);
+  box-shadow: 0 14px 26px rgba(0,0,0,.14);
+}
+
+.btn-secondary{
+  background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.26));
+}
+
+/* manifesto chips spacing */
+.hero-notes{
+  margin-top: 26px;
+  gap: 10px;
+}
+
+.hero-note{
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: 600;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.34);
+}
+
+/* balance hero columns */
+@media (min-width: 981px){
+  .hero-shell{
+    grid-template-columns: minmax(0, 1.5fr) minmax(300px, .7fr);
+    gap: 20px;
+  }
+}
+
+
+/* --- editorial typography polish --- */
+.hero-desc,
+.hero-side-block p,
+.hero-note,
+.section-card p,
+.section-card li,
+.quote,
+.footer-card,
+.status-pill,
+.topnav a,
+.btn {
+  text-wrap: pretty;
+}
+
+h1, h2, .hero-subtitle, .lead {
+  text-wrap: balance;
+}
+
+/* --- language switcher --- */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  background: rgba(255,255,255,.32);
+  border: 1px solid rgba(255,255,255,.55);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  padding: 8px 12px;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.lang-switch .globe {
+  font-size: 14px;
+  line-height: 1;
+  opacity: .9;
+}
+
+.lang-switch button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted-strong);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+}
+
+.lang-switch button.is-active {
+  color: var(--text);
+}
+
+.lang-switch .sep {
+  opacity: .5;
+}
+
+@media (max-width: 760px) {
+  .lang-switch {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+}
+
+/* hide EN-only manual line breaks when PL is active and vice versa if needed */
+html[lang-mode="pl"] .lang-only-en,
+html[lang-mode="en"] .lang-only-pl {
+  display: none !important;
+}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <div class="brand">Ant<span>sort</span></div>
-      <div class="status-pill">Wczesna wizja / Early concept</div>
-    </div>
-  </header>
+<header class="topbar">
+<div class="wrap topbar-inner">
+<a class="brand" data-en-html="Ant&lt;span&gt;sort&lt;/span&gt;" data-pl-html="Ant&lt;span&gt;sort&lt;/span&gt;" href="#top">Ant<span>sort</span></a>
+<nav aria-label="Sekcje landingu" class="topnav"><a data-en="Problem" data-pl="Problem" href="#problem">Problem</a><a data-en="Idea" data-pl="Idea" href="#idea">Idea</a><a data-en="Home" data-pl="Dom" href="#home">Dom</a><a data-en="Ants" data-pl="Mrówki" href="#ants">Mrówki</a><a data-en="Stories" data-pl="Historie" href="#people">Historie</a><a data-en="Shared" data-pl="Wspólne" href="#shared">Wspólne</a><a data-en="Status" data-pl="Status" href="#status">Status</a></nav>
+<div aria-label="Language switch" class="lang-switch"><span aria-hidden="true" class="globe">🌐</span><button class="is-active" data-lang-btn="pl" type="button">PL</button><span aria-hidden="true" class="sep">/</span><button data-lang-btn="en" type="button">EN</button></div>
+</div>
+</header>
+<main class="wrap">
+<section class="hero" id="top">
+<div class="hero-shell">
+<div class="hero-card">
+<div>
+<div class="eyebrow" data-en="Antsort" data-pl="Antsort">Antsort</div>
+<h1 data-en="Your personal home on the internet." data-pl="Twój osobisty dom w internecie.">Twój osobisty dom w internecie.</h1>
+<p class="hero-subtitle" data-en="A new way to organize life online." data-pl="Nowy sposób organizowania życia w sieci.">Nowy sposób organizowania życia w sieci.</p>
+<p class="hero-desc" data-en-html="A vision of a place that truly belongs to the user –&lt;br&gt;
+not to platforms,
+not to another app –
+but&amp;nbsp;to&amp;nbsp;them." data-pl-html="Wizja miejsca, które naprawdę należy do użytkownika –&lt;br&gt;
+nie do platform,
+nie do kolejnej aplikacji – 
+tylko&amp;nbsp;do&amp;nbsp;niego.">
+              Wizja miejsca, które naprawdę należy do użytkownika –<br/>
+nie do platform,
+nie do kolejnej aplikacji – 
+tylko do niego.
+            </p>
+<div class="hero-actions">
+<a class="btn btn-primary" data-en="Read more" data-pl="Czytaj dalej" href="#problem">Czytaj dalej</a>
+<a class="btn btn-secondary" data-en="Project status" data-pl="Status projektu" href="#status">Status projektu</a>
+</div>
+<div class="hero-notes"><div class="hero-note" data-en="Chaos does not come from a lack of tools" data-pl="Chaos nie bierze się z braku narzędzi">Chaos nie bierze się z braku narzędzi</div><div class="hero-note" data-en="The user builds their own system" data-pl="Użytkownik buduje własny system">Użytkownik buduje własny system</div><div class="hero-note" data-en="Ants help, but they do not rule" data-pl="Mrówki pomagają, ale nie rządzą">Mrówki pomagają, ale nie rządzą</div></div>
+</div>
+<div class="hero-scrollhint" data-en="Scroll to explore the vision" data-pl="Przewiń i poznaj wizję">Przewiń i poznaj wizję</div>
+</div>
+<aside aria-label="Skrót wizji Antsort" class="hero-side"><p class="hero-side-title" data-en="Core idea" data-pl="Rdzeń wizji">Rdzeń wizji</p><div class="hero-side-block"><strong data-en="Not another app" data-pl="Nie kolejna aplikacja">Nie kolejna aplikacja</strong><p data-en="Antsort is meant to organize what you already use – instead of adding one more layer of chaos." data-pl="Antsort ma pomóc uporządkować to, z czego już korzystasz – zamiast dokładać kolejną warstwę chaosu.">Antsort ma pomóc uporządkować to, z czego już korzystasz – zamiast dokładać kolejną warstwę chaosu.</p></div><div class="hero-side-block"><strong data-en="A home for everyday life" data-pl="Dom dla codzienności">Dom dla codzienności</strong><p data-en="Cabinets, shelves, compartments and paths – a system built by the user around their life, routines and tools." data-pl="Szafy, półki, przegródki i ścieżki – system budowany przez użytkownika, wokół jego życia, rutyny i narzędzi.">Szafy, półki, przegródki i ścieżki – system budowany przez użytkownika, wokół jego życia, rutyny i narzędzi.</p></div></aside>
+</div>
+</section>
+<section class="section" id="problem">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Problem" data-pl="Problem">Problem</p><h2 data-en="Antsort began with a simple observation." data-pl="Antsort powstał z bardzo prostej obserwacji.">Antsort powstał z bardzo prostej obserwacji.</h2></div><div class="section-index">01</div></div><p class="lead" data-en="Today, all of us rely on dozens of tools, apps and services." data-pl="Dzisiaj każdy z nas korzysta z dziesiątek narzędzi, aplikacji i serwisów.">Dzisiaj każdy z nas korzysta z dziesiątek narzędzi, aplikacji i serwisów.</p><p data-en="We have accounts, documents, calendars, links, work schedules, class timetables, notes and tasks. Each of these pieces lives somewhere else – across different apps, systems and places on the internet." data-pl="Mamy konta, dokumenty, kalendarze, linki, grafiki pracy, plany lekcji, notatki i zadania. Każdy z tych elementów istnieje gdzieś osobno – w różnych aplikacjach, systemach i miejscach w internecie.">Mamy konta, dokumenty, kalendarze, linki, grafiki pracy, plany lekcji, notatki i zadania. Każdy z tych elementów istnieje gdzieś osobno – w różnych aplikacjach, systemach i miejscach w internecie.</p><p data-en="The problem is not a lack of tools." data-pl="Problemem nie jest brak narzędzi.">Problemem nie jest brak narzędzi.</p><p data-en="The problem is chaos." data-pl="Problemem jest chaos.">Problemem jest chaos.</p><p data-en="We do not need another app that adds more features and makes everyday life even more complicated. We need a place where we can organize what we already use." data-pl="Nie potrzebujemy kolejnej aplikacji, która doda nowe funkcje i jeszcze bardziej skomplikuje codzienność. Potrzebujemy miejsca, w którym możemy uporządkować to, z czego już korzystamy.">Nie potrzebujemy kolejnej aplikacji, która doda nowe funkcje i jeszcze bardziej skomplikuje codzienność. Potrzebujemy miejsca, w którym możemy uporządkować to, z czego już korzystamy.</p><p data-en="That is what Antsort is meant to be." data-pl="I właśnie tym ma być Antsort.">I właśnie tym ma być Antsort.</p><p class="quote" data-en="The internet is full of things. Antsort is meant to help arrange them so that they finally begin to belong to the user." data-pl="Internet jest pełen rzeczy. Antsort ma pomóc ułożyć je tak, żeby wreszcie zaczęły należeć do użytkownika.">Internet jest pełen rzeczy. Antsort ma pomóc ułożyć je tak, żeby wreszcie zaczęły należeć do użytkownika.</p></div>
+</section>
+<section class="section" id="idea">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Idea" data-pl="Idea">Idea</p><h2 data-en="Not another app. A home for your everyday life." data-pl="Nie kolejna aplikacja. Dom dla Twojej codzienności.">Nie kolejna aplikacja. Dom dla Twojej codzienności.</h2></div><div class="section-index">02</div></div><p data-en="Antsort can be imagined as a home for your life and your routines." data-pl="Antsort można wyobrazić sobie jak dom dla Twojego życia i rutyny.">Antsort można wyobrazić sobie jak dom dla Twojego życia i rutyny.</p><p data-en="In a home, we have different cabinets – each one for a different part of life. One may belong to work, another to school, another to training, entertainment or everyday matters." data-pl="W domu mamy różne szafy – każda odpowiada innemu obszarowi życia. Jedna może być związana z pracą, inna ze szkołą, inna z treningiem, rozrywką albo sprawami codziennymi.">W domu mamy różne szafy – każda odpowiada innemu obszarowi życia. Jedna może być związana z pracą, inna ze szkołą, inna z treningiem, rozrywką albo sprawami codziennymi.</p><p data-en="Inside those cabinets are shelves. On those shelves, you place the things you use every day: apps, links, documents, routines, tools and services." data-pl="W każdej szafie znajdują się półki. Na półkach układasz rzeczy, których używasz na co dzień: aplikacje, linki, dokumenty, rutyny, narzędzia i serwisy.">W każdej szafie znajdują się półki. Na półkach układasz rzeczy, których używasz na co dzień: aplikacje, linki, dokumenty, rutyny, narzędzia i serwisy.</p><p data-en="If you have a shelf called “Movies”, you can place your streaming services there. If you have a shelf called “School”, you can upload a class schedule. If you have a shelf called “Work”, you can keep your shift schedule or the tools you need for work." data-pl="Jeśli masz półkę „Filmy”, możesz położyć tam swoje serwisy VOD. Jeśli masz półkę „Szkoła”, możesz wgrać plan lekcji. Jeśli masz półkę „Praca”, możesz trzymać grafik pracy albo narzędzia potrzebne w pracy.">Jeśli masz półkę „Filmy”, możesz położyć tam swoje serwisy VOD. Jeśli masz półkę „Szkoła”, możesz wgrać plan lekcji. Jeśli masz półkę „Praca”, możesz trzymać grafik pracy albo narzędzia potrzebne w pracy.</p><p data-en="Antsort does not impose a single structure. The user decides what their system looks like. Some will build a few simple cabinets. Others will create a more elaborate structure of shelves and compartments." data-pl="Antsort nie narzuca jednej struktury. To użytkownik decyduje, jak wygląda jego system. Jedni zbudują kilka prostych szaf. Inni stworzą bardziej rozbudowaną strukturę półek i przegródek.">Antsort nie narzuca jednej struktury. To użytkownik decyduje, jak wygląda jego system. Jedni zbudują kilka prostych szaf. Inni stworzą bardziej rozbudowaną strukturę półek i przegródek.</p><p class="quote" data-en="Antsort provides the materials and the space; the user builds a system of their own." data-pl="Antsort daje materiały i przestrzeń, a użytkownik buduje swój własny system.">Antsort daje materiały i przestrzeń, a użytkownik buduje swój własny system.</p></div>
+</section><section class="section" id="home">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Center of everyday life" data-pl="Centrum codzienności">Centrum codzienności</p><h2 data-en="A personal center for organizing offline and online life." data-pl="Osobiste centrum organizacji życia offline i online.">Osobiste centrum organizacji życia offline i online.</h2></div><div class="section-index">03</div></div><p data-en="Antsort can be seen as a personal logistics hub for everyday life." data-pl="Antsort można traktować jak osobiste centrum logistyczne codziennego życia.">Antsort można traktować jak osobiste centrum logistyczne codziennego życia.</p><p data-en="It is a place where two realities meet: offline life and online tools." data-pl="To miejsce, w którym spotykają się dwie rzeczywistości: życie offline i narzędzia online.">To miejsce, w którym spotykają się dwie rzeczywistości: życie offline i narzędzia online.</p><p data-en="A child’s timetable. A work schedule. Daily routines. The apps you use. Online services, documents and tasks." data-pl="Plan lekcji dziecka. Grafik pracy. Codzienne rutyny. Aplikacje, z których korzystasz. Serwisy internetowe, dokumenty i zadania.">Plan lekcji dziecka. Grafik pracy. Codzienne rutyny. Aplikacje, z których korzystasz. Serwisy internetowe, dokumenty i zadania.</p><p data-en="Instead of searching through different places, you can arrange them in one system." data-pl="Zamiast szukać wszystkiego w różnych miejscach, możesz ułożyć je w jednym systemie.">Zamiast szukać wszystkiego w różnych miejscach, możesz ułożyć je w jednym systemie.</p><p data-en="At the core of Antsort is a structure created by the user. It is the person who decides which cabinets to build, which shelves to create and what to place on them." data-pl="Podstawą Antsort jest struktura tworzona przez użytkownika. To człowiek decyduje, jakie szafy tworzy, jakie półki buduje i co na nich układa.">Podstawą Antsort jest struktura tworzona przez użytkownika. To człowiek decyduje, jakie szafy tworzy, jakie półki buduje i co na nich układa.</p><p class="quote" data-en="The system can help – but the foundation always remains an order built by the user." data-pl="System może pomagać – ale fundamentem zawsze pozostaje porządek zbudowany przez użytkownika.">System może pomagać – ale fundamentem zawsze pozostaje porządek zbudowany przez użytkownika.</p></div>
+</section><section class="section" id="ants">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Ants" data-pl="Mrówki">Mrówki</p><h2 data-en="Antsort is inspired by the logic of an ant colony." data-pl="Inspiracją dla Antsort jest logika kolonii mrówek.">Inspiracją dla Antsort jest logika kolonii mrówek.</h2></div><div class="section-index">04</div></div><p data-en="Ants are one of the most organized systems in nature. They gather resources, sort them, store them and build complex structures, even though no single ant governs the whole." data-pl="Mrówki są jednym z najlepiej zorganizowanych systemów w naturze. Zbierają zasoby, sortują je, magazynują i tworzą złożone struktury, mimo że żadna pojedyncza mrówka nie zarządza całością.">Mrówki są jednym z najlepiej zorganizowanych systemów w naturze. Zbierają zasoby, sortują je, magazynują i tworzą złożone struktury, mimo że żadna pojedyncza mrówka nie zarządza całością.</p><p data-en="Each one does a small part of the work. Together, they create a system that functions with remarkable precision." data-pl="Każda wykonuje małą część pracy. Razem tworzą perfekcyjnie działający system.">Każda wykonuje małą część pracy. Razem tworzą perfekcyjnie działający system.</p><p data-en="People often work like ants – moving between obligations, apps and information, trying to manage everyday life. But unlike ants, our digital lives are often scattered and chaotic." data-pl="Ludzie często pracują jak mrówki – przemieszczamy się między obowiązkami, aplikacjami i informacjami, próbując ogarnąć codzienność. Ale w przeciwieństwie do mrówek nasze cyfrowe życie jest często rozproszone i chaotyczne.">Ludzie często pracują jak mrówki – przemieszczamy się między obowiązkami, aplikacjami i informacjami, próbując ogarnąć codzienność. Ale w przeciwieństwie do mrówek nasze cyfrowe życie jest często rozproszone i chaotyczne.</p><p data-en="Antsort brings the organizing logic of an ant colony into everyday life. The point is not to work more. The point is to be as organized as ants." data-pl="Antsort przenosi logikę organizacji kolonii mrówek do codziennego życia. Nie chodzi o to, żeby pracować więcej. Chodzi o to, żeby być tak zorganizowanym jak mrówki.">Antsort przenosi logikę organizacji kolonii mrówek do codziennego życia. Nie chodzi o to, żeby pracować więcej. Chodzi o to, żeby być tak zorganizowanym jak mrówki.</p><p class="quote" data-en="In Antsort, ants are not decoration. They are a metaphor for small actions that, together, build order." data-pl="Mrówki w Antsort nie są ozdobą. Są metaforą małych działań, które razem budują porządek.">Mrówki w Antsort nie są ozdobą. Są metaforą małych działań, które razem budują porządek.</p></div>
+</section>
+<section class="section" id="people">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Stories" data-pl="Historie">Historie</p><h2 data-en="Imagine a few different people arriving in Antsort." data-pl="Wyobraź sobie kilka różnych osób, które trafiają do Antsort.">Wyobraź sobie kilka różnych osób, które trafiają do Antsort.</h2></div><div class="section-index">05</div></div><p data-en="The first story is about someone who works mainly on a computer. They have dozens of tabs open, documents across different services and several projects running at once. Every morning starts with searching again: where was that file, where was that table, where was the link to the project panel. In Antsort, they enter their own home. One shelf holds projects, another tools, and somewhere nearby are documents. Every project has its place. There is no need to remember URLs or where something was saved." data-pl="Pierwsza historia to ktoś, kto pracuje głównie przy komputerze. Ma otwarte dziesiątki zakładek, dokumenty w różnych usługach, kilka projektów naraz. Rano otwiera przeglądarkę i znów zaczyna szukać: gdzie był ten plik, gdzie ta tabela, gdzie był link do panelu projektu. W Antsort wchodzi do swojego domu. Na jednej półce ma projekty, na innej narzędzia, gdzieś obok dokumenty. Każdy projekt ma swoje miejsce. Nie musi pamiętać adresów stron ani tego, gdzie coś było zapisane.">Pierwsza historia to ktoś, kto pracuje głównie przy komputerze. Ma otwarte dziesiątki zakładek, dokumenty w różnych usługach, kilka projektów naraz. Rano otwiera przeglądarkę i znów zaczyna szukać: gdzie był ten plik, gdzie ta tabela, gdzie był link do panelu projektu. W Antsort wchodzi do swojego domu. Na jednej półce ma projekty, na innej narzędzia, gdzieś obok dokumenty. Każdy projekt ma swoje miejsce. Nie musi pamiętać adresów stron ani tego, gdzie coś było zapisane.</p><p data-en="The second story is about someone whose internet life is more everyday than professional. A bit of work, a bit of private life, and a lot of practical things to handle. Bills, banking, calendars, the websites they use regularly, places where they watch films, places where they read. In Antsort, they build a home that feels almost like an apartment. One area is for daily matters, another for entertainment, and somewhere nearby are the things that help keep life together." data-pl="Druga historia to ktoś, kto żyje bardziej codziennym internetem. Trochę pracy, trochę rzeczy prywatnych, trochę spraw do załatwienia. Rachunki, bank, kalendarz, jakieś strony z których korzysta regularnie, miejsca gdzie ogląda filmy, gdzie coś czyta. W Antsort buduje sobie dom trochę jak mieszkanie. Jedna część to sprawy codzienne, druga to rozrywka, gdzieś obok rzeczy do ogarniania życia.">Druga historia to ktoś, kto żyje bardziej codziennym internetem. Trochę pracy, trochę rzeczy prywatnych, trochę spraw do załatwienia. Rachunki, bank, kalendarz, jakieś strony z których korzysta regularnie, miejsca gdzie ogląda filmy, gdzie coś czyta. W Antsort buduje sobie dom trochę jak mieszkanie. Jedna część to sprawy codzienne, druga to rozrywka, gdzieś obok rzeczy do ogarniania życia.</p><p data-en="The third story is about someone who collects things from the internet. Links, inspiration, ideas, articles, things that might be useful one day. In the normal internet, all of it ends up in bookmarks or random notes. In Antsort, those things go into their own storehouse. The ants help label, organize and remember where everything belongs." data-pl="Trzecia historia to ktoś, kto zbiera dużo rzeczy z internetu. Linki, inspiracje, pomysły, artykuły, rzeczy które może kiedyś się przydadzą. W normalnym internecie wszystko kończy w zakładkach albo w przypadkowych notatkach. W Antsort wrzuca rzeczy do swojego magazynu. Mrówki pomagają oznaczyć, uporządkować i zapamiętać gdzie to leży.">Trzecia historia to ktoś, kto zbiera dużo rzeczy z internetu. Linki, inspiracje, pomysły, artykuły, rzeczy które może kiedyś się przydadzą. W normalnym internecie wszystko kończy w zakładkach albo w przypadkowych notatkach. W Antsort wrzuca rzeczy do swojego magazynu. Mrówki pomagają oznaczyć, uporządkować i zapamiętać gdzie to leży.</p><p data-en="The fourth story is about someone who moves through many tools and platforms. For them, Antsort becomes a kind of command center. They enter their own home and from there move outward – to the projects, tools and platforms they need." data-pl="Czwarta historia to ktoś, kto dużo działa w różnych narzędziach i platformach. Dla niego Antsort staje się czymś w rodzaju centrum sterowania. Wchodzi do swojego domu i stamtąd przechodzi dalej – do projektów, narzędzi i platform, które są mu potrzebne.">Czwarta historia to ktoś, kto dużo działa w różnych narzędziach i platformach. Dla niego Antsort staje się czymś w rodzaju centrum sterowania. Wchodzi do swojego domu i stamtąd przechodzi dalej – do projektów, narzędzi i platform, które są mu potrzebne.</p><p class="quote" data-en="Each person builds Antsort differently. But in every story the same moment appears: instead of wandering through the internet, they return to a place of their own." data-pl="Każdy człowiek buduje swój Antsort inaczej. Ale w każdej historii pojawia się ten sam moment: zamiast błądzić po internecie, wraca do swojego miejsca.">Każdy człowiek buduje swój Antsort inaczej. Ale w każdej historii pojawia się ten sam moment: zamiast błądzić po internecie, wraca do swojego miejsca.</p></div>
+</section>
+<section class="section" id="time">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Time" data-pl="Czas">Czas</p><h2 data-en="Time can also become part of this space." data-pl="Czas też może stać się częścią tej przestrzeni.">Czas też może stać się częścią tej przestrzeni.</h2></div><div class="section-index">06</div></div><p data-en="Beyond using the internet, people also have to manage time. Work, classes, meetings, daily routines. In the normal world, this happens in separate places: a calendar in one app, a daily plan in another, reminders in a third." data-pl="Ktoś oprócz zwykłego korzystania z internetu musi też ogarniać swój czas. Praca, zajęcia, spotkania, rutyny dnia codziennego. W normalnym świecie robi to w różnych miejscach: kalendarz w jednej aplikacji, plan dnia w drugiej, przypomnienia w trzeciej.">Ktoś oprócz zwykłego korzystania z internetu musi też ogarniać swój czas. Praca, zajęcia, spotkania, rutyny dnia codziennego. W normalnym świecie robi to w różnych miejscach: kalendarz w jednej aplikacji, plan dnia w drugiej, przypomnienia w trzeciej.</p><p data-en="In Antsort, it works differently. The person enters their home and, beyond shelves filled with things, there is also a wall that holds the shape of the day. It might be a work roster, a class timetable, a weekly schedule or a plan for the day." data-pl="W Antsort wygląda to inaczej. Ten człowiek wchodzi do swojego domu i oprócz półek z rzeczami ma tam też ścianę z planem dnia. Może to być grafik pracy, plan lekcji, tygodniowy rozkład zajęć, harmonogram dnia.">W Antsort wygląda to inaczej. Ten człowiek wchodzi do swojego domu i oprócz półek z rzeczami ma tam też ścianę z planem dnia. Może to być grafik pracy, plan lekcji, tygodniowy rozkład zajęć, harmonogram dnia.</p><p data-en="In the normal world, if they wanted all of that inside a calendar, they would have to rewrite everything by hand: hour by hour, day by day. Most people do not have time for that, so the plan remains a photo on a phone, a PDF file or a sheet pinned to the wall." data-pl="W normalnym świecie, jeśli chciałby mieć to w kalendarzu, musiałby przepisywać wszystko ręcznie: godzina po godzinie, dzień po dniu. Większość ludzi nie ma na to czasu, więc plan istnieje gdzieś jako zdjęcie w telefonie, plik PDF albo kartka przypięta do ściany.">W normalnym świecie, jeśli chciałby mieć to w kalendarzu, musiałby przepisywać wszystko ręcznie: godzina po godzinie, dzień po dniu. Większość ludzi nie ma na to czasu, więc plan istnieje gdzieś jako zdjęcie w telefonie, plik PDF albo kartka przypięta do ściany.</p><p data-en="In Antsort, they do it differently. They take a roster or a timetable and simply drop it into their home – in one click, like an image or a file. The system sees the plan and suddenly that part of the space begins to function like a map of time." data-pl="W Antsort robi to inaczej. Dostaje grafik albo plan lekcji i po prostu wrzuca go do swojego domu – jednym kliknięciem, jak obraz albo plik. System widzi plan i nagle ten fragment przestrzeni zaczyna działać jak mapa czasu.">W Antsort robi to inaczej. Dostaje grafik albo plan lekcji i po prostu wrzuca go do swojego domu – jednym kliknięciem, jak obraz albo plik. System widzi plan i nagle ten fragment przestrzeni zaczyna działać jak mapa czasu.</p><p class="quote" data-en="There is no need to rewrite anything or build a calendar from scratch. They simply place the plan inside, and the rest begins to arrange itself around it." data-pl="Człowiek nie musi niczego przepisywać ani budować kalendarza od zera. Po prostu wrzuca plan, a reszta zaczyna się układać wokół niego.">Człowiek nie musi niczego przepisywać ani budować kalendarza od zera. Po prostu wrzuca plan, a reszta zaczyna się układać wokół niego.</p></div>
+</section>
+<section class="section" id="shared">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Shared spaces" data-pl="Wspólne przestrzenie">Wspólne przestrzenie</p><h2 data-en="Everyone has their own home, but doors can exist between homes." data-pl="Każdy ma swój własny dom, ale między domami mogą istnieć drzwi.">Każdy ma swój własny dom, ale między domami mogą istnieć drzwi.</h2></div><div class="section-index">07</div></div><p data-en="Antsort does not have to belong to just one person. In real life, many things are done together with other people." data-pl="Antsort nie musi być tylko przestrzenią jednej osoby. Bo w prawdziwym życiu wiele rzeczy robimy razem z innymi ludźmi.">Antsort nie musi być tylko przestrzenią jednej osoby. Bo w prawdziwym życiu wiele rzeczy robimy razem z innymi ludźmi.</p><p data-en="Family, partners, friends and coworkers all have shared matters. On the normal internet, that means sending links, files, screenshots and messages. In Antsort, each person has their own home, but doors can exist between those homes." data-pl="Rodzina, partner, znajomi, współpracownicy – wszyscy mają jakieś wspólne sprawy. W normalnym internecie oznacza to wysyłanie linków, plików, screenów i wiadomości. W Antsort każdy ma swój własny dom, ale między domami mogą istnieć drzwi.">Rodzina, partner, znajomi, współpracownicy – wszyscy mają jakieś wspólne sprawy. W normalnym internecie oznacza to wysyłanie linków, plików, screenów i wiadomości. W Antsort każdy ma swój własny dom, ale między domami mogą istnieć drzwi.</p><p data-en="If you want, you can share part of your space with someone else. A shelf with documents, a travel plan, a to-do list, important links or a child’s class timetable. The other person sees it inside their own Antsort as if it were part of their world – but only to the extent it was shared." data-pl="Jeśli chcesz, możesz udostępnić komuś kawałek swojej przestrzeni. Na przykład półkę z dokumentami, plan wakacji, listę rzeczy do zrobienia, ważne linki albo plan lekcji dziecka. Druga osoba widzi to w swoim Antsort tak, jakby było częścią jej świata – ale tylko w takim zakresie, w jakim zostało udostępnione.">Jeśli chcesz, możesz udostępnić komuś kawałek swojej przestrzeni. Na przykład półkę z dokumentami, plan wakacji, listę rzeczy do zrobienia, ważne linki albo plan lekcji dziecka. Druga osoba widzi to w swoim Antsort tak, jakby było częścią jej świata – ale tylko w takim zakresie, w jakim zostało udostępnione.</p><p data-en="There is no need to send things around and search for them all over again each time. You simply enter your own home and know that somewhere nearby there is also a piece of space you share with someone close to you." data-pl="Nie trzeba nic wysyłać i za każdym razem szukać od nowa. Po prostu wchodzisz do swojego domu i wiesz, że gdzieś obok istnieje też kawałek przestrzeni, który dzielisz z kimś bliskim.">Nie trzeba nic wysyłać i za każdym razem szukać od nowa. Po prostu wchodzisz do swojego domu i wiesz, że gdzieś obok istnieje też kawałek przestrzeni, który dzielisz z kimś bliskim.</p><p class="quote" data-en="Because of that, Antsort is not only the personal order of one individual. It can also become a small shared space where people keep life together." data-pl="Dzięki temu Antsort nie jest tylko osobistym porządkiem jednej osoby. Może stać się też małą wspólną przestrzenią, w której ludzie ogarniają rzeczy razem.">Dzięki temu Antsort nie jest tylko osobistym porządkiem jednej osoby. Może stać się też małą wspólną przestrzenią, w której ludzie ogarniają rzeczy razem.</p></div>
+</section>
+<section class="section" id="principles">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Core principle" data-pl="Sedno idei">Sedno idei</p><h2 data-en="Antsort does not try to change the user’s life." data-pl="Antsort nie próbuje zmienić życia użytkownika.">Antsort nie próbuje zmienić życia użytkownika.</h2></div><div class="section-index">08</div></div><p data-en="It does not create new obligations. It does not force anyone to change their tools." data-pl="Nie tworzy nowych obowiązków. Nie zmusza do zmiany narzędzi.">Nie tworzy nowych obowiązków. Nie zmusza do zmiany narzędzi.</p><p data-en="It only helps arrange what already exists." data-pl="Pomaga jedynie poukładać to, co już istnieje.">Pomaga jedynie poukładać to, co już istnieje.</p><p data-en="So that everyday life – both offline and online – can have a structure of its own." data-pl="Tak, aby codzienne życie – zarówno offline, jak i online – miało swoją strukturę.">Tak, aby codzienne życie – zarówno offline, jak i online – miało swoją strukturę.</p><ul class="principles"><li data-en="The user is the architect of their own system." data-pl="Użytkownik jest architektem swojego systemu.">Użytkownik jest architektem swojego systemu.</li><li data-en="The system helps, but does not impose a single structure." data-pl="System pomaga, ale nie narzuca jednej struktury.">System pomaga, ale nie narzuca jednej struktury.</li><li data-en="Offline and online can meet in one place." data-pl="Offline i online mogą spotkać się w jednym miejscu.">Offline i online mogą spotkać się w jednym miejscu.</li><li data-en="Small actions build a greater order." data-pl="Małe działania budują większy porządek.">Małe działania budują większy porządek.</li></ul></div>
+</section>
+<section class="section" id="status">
+<div class="section-card"><div class="section-headline"><div><p class="section-label" data-en="Status" data-pl="Status">Status</p><h2 data-en="Today, Antsort is still a vision – but it already has a direction." data-pl="Antsort jest dziś wizją, ale ta wizja ma już swój kierunek.">Antsort jest dziś wizją, ale ta wizja ma już swój kierunek.</h2></div><div class="section-index">09</div></div><p data-en="This is still an early stage. Antsort is not yet a finished product or a closed definition." data-pl="To na razie wczesny etap. Antsort nie jest jeszcze zamkniętym produktem ani skończoną definicją.">To na razie wczesny etap. Antsort nie jest jeszcze zamkniętym produktem ani skończoną definicją.</p><p data-en="It is an idea that is only beginning to form into a clearer and clearer system." data-pl="To idea, która dopiero układa się w coraz wyraźniejszy system.">To idea, która dopiero układa się w coraz wyraźniejszy system.</p><p data-en="Some elements of this vision are already taking shape in small prototypes and experiments. Some test the logic of order; others explore what a personal space on the internet might look like." data-pl="Niektóre elementy tej wizji powstają już w małych prototypach i eksperymentach. Część z nich testuje logikę porządkowania, część bada, jak może wyglądać osobista przestrzeń użytkownika w internecie.">Niektóre elementy tej wizji powstają już w małych prototypach i eksperymentach. Część z nich testuje logikę porządkowania, część bada, jak może wyglądać osobista przestrzeń użytkownika w internecie.</p><p data-en="Antsort begins with a question: can digital life finally be arranged in a way that truly belongs to the human being?" data-pl="Antsort zaczyna się od pytania, czy cyfrowe życie można wreszcie ułożyć tak, żeby naprawdę należało do człowieka.">Antsort zaczyna się od pytania, czy cyfrowe życie można wreszcie ułożyć tak, żeby naprawdę należało do człowieka.</p><p class="quote" data-en="If we already move through life like ants, perhaps we should be as organized as they are." data-pl="Bo skoro i tak pracujemy jak mrówki, warto też być tak zorganizowanym jak one.">Bo skoro i tak pracujemy jak mrówki, warto też być tak zorganizowanym jak one.</p></div>
+</section>
+</main>
+<footer class="footer wrap">
+<div class="footer-card">
+<div class="footer-brand" data-en-html="Ant&lt;span&gt;sort&lt;/span&gt;" data-pl-html="Ant&lt;span&gt;sort&lt;/span&gt;">Ant<span>sort</span></div>
+<div data-en="© 2026 Katgo - All rights reserved." data-pl="© 2026 Katgo - All rights reserved.">© 2026 Katgo - All rights reserved.</div>
+</div>
+</footer>
+<script>
+(function(){
+  const SELECTORS = [
+    '.hero-desc',
+    '.hero-side-block p',
+    '.hero-note',
+    '.section-card p',
+    '.section-card li',
+    '.quote',
+    '.footer-card div',
+    '.status-pill',
+    '.topnav a',
+    '.btn',
+    '.section-label',
+    '.hero-scrollhint'
+  ];
 
-  <main class="wrap">
-    <section class="hero" id="top">
-      <div class="hero-card">
-        <div class="eyebrow">Antsort</div>
-        <h1>Twój osobisty dom w internecie.</h1>
-        <p class="hero-subtitle">Nowy sposób organizowania życia w sieci.</p>
-        <p class="hero-desc">
-          Wizja miejsca, które naprawdę należy do użytkownika — nie do platform,
-          nie do kolejnej aplikacji, tylko do niego.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#problem">Czytaj dalej</a>
-          <a class="btn btn-secondary" href="#status">Status projektu</a>
-        </div>
-      </div>
-    </section>
+  const ORPHAN_WORDS = ['a','i','o','u','w','z'];
+  const SHORT_WORDS = ['do','na','od','po','za','we','ze','ku','ta','to','no','nie'];
 
-    <section class="section" id="problem">
-      <div class="section-card">
-        <p class="section-label">Problem</p>
-        <h2>Internet jest potężny, ale nie jest zbudowany wokół człowieka.</h2>
-        <p class="lead">Wyobraź sobie zwykły dzień w dzisiejszym świecie.</p>
-        <p>
-          Rano sięgasz po telefon. W nim dziesiątki aplikacji. Wchodzisz w jedną,
-          potem w drugą, potem w trzecią. Dokumenty są w jednym miejscu, notatki
-          w innym, kalendarz gdzieś indziej, zakładki w przeglądarce, rzeczy do pracy
-          w kolejnej usłudze, bank jeszcze gdzie indziej. Każda rzecz istnieje
-          w osobnym świecie.
-        </p>
-        <p>
-          Człowiek próbuje to ogarniać. Tworzy foldery, zapisuje linki, robi listy.
-          Układa sobie jakiś porządek. A potem zmienia telefon i zaczyna od nowa.
-          Zmienia komputer i znów wszystko trzeba układać od początku.
-        </p>
-        <p class="quote">
-          Bo w gruncie rzeczy to nigdy nie jest jego przestrzeń. To są tylko kawałki
-          przestrzeni należące do różnych platform.
-        </p>
-      </div>
-    </section>
+  function fixText(text){
+    if(!text || !text.trim()) return text;
 
-    <section class="section" id="idea">
-      <div class="section-card">
-        <p class="section-label">Idea</p>
-        <h2>A co jeśli zamiast poruszać się po tysiącu aplikacji miałbyś swój własny dom w internecie?</h2>
-        <p>I wtedy pojawia się pewna myśl.</p>
-        <p>
-          Nie kawałek domu należący do Google. Nie kawałek domu należący do Apple.
-          Po prostu miejsce, które jest Twoje.
-        </p>
-        <p>
-          Miejsce, do którego wchodzisz i z którego możesz pójść gdziekolwiek.
-        </p>
-        <p>
-          Ale to nie jest zwykły pulpit z ikonami. Ten dom możesz sam zaprojektować.
-          Możesz zdecydować gdzie są drzwi, gdzie są półki, gdzie są szuflady,
-          gdzie trzymasz rzeczy ważne, gdzie rzeczy codzienne, a gdzie te, które
-          wyciągasz raz na jakiś czas.
-        </p>
-        <p class="muted">Każdy człowiek buduje go trochę inaczej.</p>
-      </div>
-    </section>
+    let t = text;
 
-    <section class="section" id="ants">
-      <div class="section-card">
-        <p class="section-label">Mrówki</p>
-        <h2>W tym domu nie jesteś sam.</h2>
-        <p class="lead">Są tam małe pomocniki. Mrówki.</p>
-        <p>
-          Nie dlatego, że ktoś wymyślił motyw graficzny. Mrówki są metaforą funkcji systemu.
-        </p>
-        <p>
-          Jeśli coś trzeba gdzieś odłożyć — mogą to zanieść. Jeśli coś trzeba uporządkować —
-          mogą pomóc to posortować. Jeśli czegoś szukasz — mogą pokazać drogę.
-        </p>
-        <p>
-          Tworzą ścieżki, pomagają w porządkowaniu, ułatwiają codzienne ruchy w tym domu.
-        </p>
-        <p class="quote">
-          Ale to Ty jesteś architektem. To Ty decydujesz gdzie co jest i jak wygląda Twój porządek.
-        </p>
-      </div>
-    </section>
+    // Ellipsis
+    t = t.replace(/\.{3}/g, '…');
 
-    <section class="section" id="name">
-      <div class="section-card">
-        <p class="section-label">Nazwa</p>
-        <h2>Dlaczego Antsort?</h2>
-        <p>
-          Nazwa Antsort bierze się z bardzo prostego obrazu. Kiedy patrzysz na mrowisko
-          z boku, widzisz chaos. Setki mrówek biegają w różne strony, coś niosą,
-          gdzieś znikają, wracają.
-        </p>
-        <p>
-          Ale kiedy przyjrzysz się chwilę dłużej, zaczynasz zauważać, że w tym chaosie
-          jest porządek.
-        </p>
-        <p>
-          Mrówki wiedzą gdzie iść, co przenieść, gdzie coś odłożyć. Tworzą ścieżki,
-          magazynują rzeczy i utrzymują cały system w ruchu.
-        </p>
-        <p class="quote">
-          Małe działania, które razem układają chaos w porządek.
-        </p>
-      </div>
-    </section>
+    // Normalize hyphen used as parenthetical dash when spaced
+    t = t.replace(/\s-\s/g, ' – ');
 
-    <section class="section" id="people">
-      <div class="section-card">
-        <p class="section-label">Różni ludzie</p>
-        <h2>Antsort nie jest dla jednego typu człowieka.</h2>
-        <div class="grid-2">
-          <div class="mini-card">
-            <h3>Osoba pracująca przy komputerze</h3>
-            <p>Dziesiątki zakładek, dokumentów i projektów. W Antsort każdy projekt ma swoje miejsce.</p>
-          </div>
-          <div class="mini-card">
-            <h3>Codzienny użytkownik internetu</h3>
-            <p>Bank, rachunki, kalendarz, rozrywka. W jego domu wszystko jest tam, gdzie powinno być.</p>
-          </div>
-          <div class="mini-card">
-            <h3>Kolekcjoner rzeczy z internetu</h3>
-            <p>Linki, inspiracje, artykuły. W Antsort tworzy z nich swoją własną bibliotekę.</p>
-          </div>
-          <div class="mini-card">
-            <h3>Osoba działająca w wielu narzędziach</h3>
-            <p>Dla niej Antsort staje się centrum sterowania cyfrowym światem.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    // Non-breaking spaces after 1-letter Polish orphan words
+    const oneLetter = new RegExp('(^|\\s)(' + ORPHAN_WORDS.join('|') + ')\\s+', 'gi');
+    t = t.replace(oneLetter, (m, p1, p2) => `${p1}${p2}\u00A0`);
 
-    <section class="section" id="time">
-      <div class="section-card">
-        <p class="section-label">Czas</p>
-        <h2>Czas też może być częścią tej przestrzeni.</h2>
-        <p>
-          Grafik pracy, plan lekcji, harmonogram dnia.
-        </p>
-        <p>
-          Zamiast przepisywać wszystko do kalendarza, po prostu wrzucasz plan
-          do swojego domu.
-        </p>
-        <p>
-          System pomaga odnaleźć właściwy moment i prowadzi do rzeczy, które są z nim związane.
-        </p>
-      </div>
-    </section>
+    // Also protect some short two-letter prepositions/conjunctions
+    const shortWords = new RegExp('(^|\\s)(' + SHORT_WORDS.join('|') + ')\\s+', 'gi');
+    t = t.replace(shortWords, (m, p1, p2) => `${p1}${p2}\u00A0`);
 
-    <section class="section" id="shared">
-      <div class="section-card">
-        <p class="section-label">Wspólne przestrzenie</p>
-        <h2>Każdy ma swój własny dom, ale między domami mogą istnieć drzwi.</h2>
-        <p>
-          Antsort nie musi być tylko przestrzenią jednej osoby.
-        </p>
-        <p>
-          Możesz udostępnić komuś półkę z dokumentami, plan wakacji, listę rzeczy do zrobienia
-          albo ważne linki.
-        </p>
-        <p class="quote">
-          Nie trzeba nic wysyłać. Po prostu dzielicie kawałek przestrzeni.
-        </p>
-      </div>
-    </section>
+    // Prevent orphan at end: last two words together
+    t = t.replace(/\s+([^\s]+)\s+([^\s]+)\s*$/u, '\u00A0$1\u00A0$2');
 
-    <section class="section" id="principles">
-      <div class="section-card">
-        <p class="section-label">Zasady</p>
-        <h2>Podstawowe założenia świata Antsort.</h2>
-        <ul class="principles">
-          <li>Użytkownik jest architektem.</li>
-          <li>System pomaga, ale nie narzuca.</li>
-          <li>Twoja przestrzeń należy do Ciebie.</li>
-          <li>Małe działania tworzą porządek.</li>
-        </ul>
-      </div>
-    </section>
+    return t;
+  }
 
-    <section class="section" id="status">
-      <div class="section-card">
-        <p class="section-label">Status</p>
-        <h2>To na razie wczesna wizja.</h2>
-        <p>
-          Eksperymentujemy z nowym sposobem organizowania życia w internecie.
-        </p>
-      </div>
-    </section>
-  </main>
+  function walk(node){
+    for(const child of Array.from(node.childNodes)){
+      if(child.nodeType === Node.TEXT_NODE){
+        child.nodeValue = fixText(child.nodeValue);
+      } else if(child.nodeType === Node.ELEMENT_NODE){
+        const tag = child.tagName;
+        if(tag !== 'SCRIPT' && tag !== 'STYLE' && tag !== 'CODE' && tag !== 'PRE'){
+          walk(child);
+        }
+      }
+    }
+  }
 
-  <footer class="footer wrap">
-    Antsort — wczesna wizja produktu
-  </footer>
-</body>
+  function applyEditorialTypography(){
+    document.querySelectorAll(SELECTORS.join(',')).forEach(el => walk(el));
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyEditorialTypography);
+  } else {
+    applyEditorialTypography();
+  }
+})();
+</script><script>
+(function(){
+  const STORAGE_KEY = 'antsort-lang';
+
+  function getPreferredLanguage() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'pl' || saved === 'en') return saved;
+
+    const navLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    if (navLang.startsWith('pl')) return 'pl';
+    return 'en';
+  }
+
+  function setNodeContent(el, lang) {
+    const htmlKey = lang === 'pl' ? 'plHtml' : 'enHtml';
+    const textKey = lang === 'pl' ? 'pl' : 'en';
+
+    if (el.dataset && el.dataset[htmlKey]) {
+      el.innerHTML = el.dataset[htmlKey];
+      return;
+    }
+    if (el.dataset && el.dataset[textKey]) {
+      el.textContent = el.dataset[textKey];
+    }
+  }
+
+  function applyLanguage(lang) {
+    document.documentElement.setAttribute('lang-mode', lang);
+    document.documentElement.setAttribute('lang', lang === 'pl' ? 'pl' : 'en');
+    localStorage.setItem(STORAGE_KEY, lang);
+
+    document.querySelectorAll('[data-pl], [data-en], [data-pl-html], [data-en-html]').forEach(el => {
+      setNodeContent(el, lang);
+    });
+
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) {
+      desc.setAttribute('content', lang === 'pl' ? desc.dataset.pl : desc.dataset.en);
+    }
+
+    const title = document.querySelector('title');
+    if (title) {
+      title.textContent = lang === 'pl' ? title.dataset.pl : title.dataset.en;
+    }
+
+    document.querySelectorAll('[data-lang-btn]').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.langBtn === lang);
+      btn.setAttribute('aria-pressed', btn.dataset.langBtn === lang ? 'true' : 'false');
+    });
+  }
+
+  function initLanguageSwitcher() {
+    const lang = getPreferredLanguage();
+    applyLanguage(lang);
+
+    document.querySelectorAll('[data-lang-btn]').forEach(btn => {
+      btn.addEventListener('click', function(){
+        applyLanguage(btn.dataset.langBtn);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguageSwitcher);
+  } else {
+    initLanguageSwitcher();
+  }
+})();
+</script></body>
 </html>
